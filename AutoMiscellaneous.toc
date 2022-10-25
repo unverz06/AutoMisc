@@ -1,0 +1,13 @@
+## Interface: 100000
+## Interface-WOTLKC: 30400
+## Interface-Classic: 11403
+## Title: AutoMiscellaneous
+## Notes: Sell grey, Repair.
+## Author: unverz
+## Version: 0.0.1
+# X-Curse-Project-ID: 686482
+
+automiscellaneous.lua
+# help.lua
+
+# /dump select(4, GetBuildInfo())
