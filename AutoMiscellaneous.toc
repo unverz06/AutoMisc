@@ -4,10 +4,12 @@
 ## Title: AutoMiscellaneous
 ## Notes: Sell grey, Repair.
 ## Author: unverz
-## Version: 0.0.1
+## Version: 0.0.2
 # X-Curse-Project-ID: 686482
 
-automiscellaneous.lua
+main.lua
+locales/en.lua
+# locales/fr.lua
 # help.lua
 
 # /dump select(4, GetBuildInfo())
