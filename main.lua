@@ -11,15 +11,11 @@ local player = UnitName("player")
 ]]
 
 local function selfMessage(v)
-    DEFAULT_CHAT_FRAME:AddMessage(v, 0.19, 0.55, 1.0);
-  end
-  
-  local function debugMessage(v)
     DEFAULT_CHAT_FRAME:AddMessage(v, 1.0, 1.0, 0.0);
   end
 
 --[[
-    AutoQuests
+    AutoMiscellaneous
 ]]
 
 local function RegisterAutoMiscellaneous()
@@ -32,8 +28,8 @@ local function RegisterAutoMiscellaneous()
             for bag = 0, 5 do
                 for slot = 0, GetContainerNumSlots(bag) do
                     local link = GetContainerItemLink(bag, slot)
-                    if link and (select(3, GetItemInfo(link)) == 0) then
-                        total = total + select(11, GetItemInfo(link))
+                    if link and (select(3, GetItemInfo(link)) == 0) then -- 3 is "itemQuality" of "GetItemInfo" and 0 is "Poor" of "itemQuality"
+                        total = total + select(11, GetItemInfo(link)) -- 11 is "sellPrice" of "GetItemInfo"
                         UseContainerItem(bag, slot)
                     end
                 end
@@ -44,18 +40,23 @@ local function RegisterAutoMiscellaneous()
             end
 
             if CanMerchantRepair() then
-                local repairAllCost, canRepair = GetRepairAllCost()
+                local repairCost, canRepair = GetRepairAllCost()
+                print(repairCost, canRepair)
                 if canRepair then
-                    if repairAllCost > GetMoney() then
+                    if repairCost > GetMoney() then
                         selfMessage(L.REPAIR_MONEY)
                     else
                         RepairAllItems()
-                        selfMessage(L.REPAIR_OK .. GetCoinTextureString(repairAllCost, " "));
+                        selfMessage(L.REPAIR_OK .. GetCoinTextureString(repairCost, " "));
                     end
                 end
             end
 
         end
+    end
+
+    local function NewMisc() -- new function function_name( ... )
+            -- body
     end
     
 
@@ -63,6 +64,7 @@ local function RegisterAutoMiscellaneous()
     f:RegisterEvent("MERCHANT_SHOW")
     f:RegisterEvent("VARIABLES_LOADED")
     f:SetScript("OnEvent", RepairItemsAndSellGrey)
+    -- f:SetScript("OnEvent", NewMisc)
 end
 
 --[[
@@ -117,6 +119,5 @@ f:SetScript("OnEvent", function(self, event)
         CreateConfigurationPanel()
     elseif event == "PLAYER_LOGIN" then
         RegisterAutoMiscellaneous()
-        selfMessage(L.WELCOME.HI .. player .. L.WELCOME.LOADED);
     end
 end)
