@@ -15,10 +15,10 @@ local function selfMessage(v)
   end
 
 --[[
-    AutoMiscellaneous
+    AutoMisc
 ]]
 
-local function RegisterAutoMiscellaneous()
+local function RegisterAutoMisc()
 
     local function RepairItemsAndSellGrey(self, event)
         if (event == "MERCHANT_SHOW") then
@@ -118,6 +118,6 @@ f:SetScript("OnEvent", function(self, event)
     if event == "ADDON_LOADED" then
         CreateConfigurationPanel()
     elseif event == "PLAYER_LOGIN" then
-        RegisterAutoMiscellaneous()
+        RegisterAutoMisc()
     end
 end)

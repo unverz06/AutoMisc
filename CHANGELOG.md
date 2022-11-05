@@ -2,7 +2,7 @@
 
 > Next
 ## 1.0.0
-- init project
+- init project AutoMisc
 - autoSellGrey
 - autoRepair
 

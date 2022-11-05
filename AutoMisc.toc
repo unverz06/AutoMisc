@@ -1,7 +1,7 @@
 ## Interface: 100000
 ## Interface-WOTLKC: 30400
 ## Interface-Classic: 11403
-## Title: AutoMiscellaneous |cff03befc By unverz06|r
+## Title: AutoMisc |cff03befc By unverz06|r
 ## Notes: Sell grey, Repair.
 ## Author: unverz
 ## Version: 1.0.0
