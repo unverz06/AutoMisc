@@ -4,7 +4,7 @@
 ## x.x.x
 
 > Released
-## 1.0.0
+## 0.0.1
 - Initial release, rebuilt from scratch on the AutoQuests structure
 - Options panel (Options > AddOns > AutoMisc) with one checkbox per feature
 - Pause keys: hold Shift, Ctrl or Alt to suspend the addon (each key can be turned off)
