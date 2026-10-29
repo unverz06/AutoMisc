@@ -1,0 +1,19 @@
+## Interface: 120105, 16001
+
+## Title: AutoMisc |cfffc4103 v1.0.0|r |cff03befc unverz06|r
+## Notes: Small quality-of-life automations: sell grey items, auto repair (guild first), accept summons and more.
+## Notes-frFR: Petites automatisations de confort : vente des objets gris, réparation auto (guilde d'abord), invocations et plus.
+## Author: unverz06
+## Version: 1.0.0
+## SavedVariables: AutoMiscDB
+## Category: Miscellaneous
+
+# Locale (enUS first: it defines the table and the fallback)
+locale/enUS.lua
+locale/frFR.lua
+
+# Main app
+core.lua
+modules/vendor.lua
+modules/social.lua
+options.lua
