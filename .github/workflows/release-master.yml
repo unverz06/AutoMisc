@@ -1,0 +1,84 @@
+name: Release on Merge to Master
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - AutoMisc.toc
+      - CHANGELOG.md
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from TOC
+        id: version
+        run: |
+          version=$(sed -nE 's/^## Version:[[:space:]]*([0-9]+\.[0-9]+\.[0-9]+)[[:space:]]*$/\1/p' AutoMisc.toc | head -n 1)
+          if [ -z "$version" ]; then
+            echo "::error::Version not found in AutoMisc.toc"
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Check if release already exists
+        id: exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "Release $VERSION already exists, skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract release notes from CHANGELOG
+        if: steps.exists.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v v="$VERSION" '
+            $0 == "## " v { found = 1; next }
+            /^## /        { found = 0 }
+            found
+          ' CHANGELOG.md > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "::warning::No CHANGELOG entry found for $VERSION"
+            echo "Release $VERSION" > release_notes.md
+          fi
+
+      - name: Package addon
+        if: steps.exists.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          mkdir AutoMisc
+          cp -r AutoMisc.toc core.lua options.lua modules locale AutoMisc/
+          zip -r "AutoMisc-${VERSION}.zip" AutoMisc
+
+      - name: Create Release
+        if: steps.exists.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$VERSION" "AutoMisc-${VERSION}.zip" \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION" \
+            --notes-file release_notes.md
